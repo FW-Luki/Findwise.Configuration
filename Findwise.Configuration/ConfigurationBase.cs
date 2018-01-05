@@ -132,36 +132,44 @@ namespace Findwise.Configuration
         {
             return GetKnownTypes(typeof(T));
         }
-        [Obsolete("Implement usage of TypeExtender.GetDerivedType()")]
-        private static IEnumerable<Type> GetKnownTypes(Type containingType)
+        private static IEnumerable<Type> GetKnownTypes(Type baseType, HashSet<Type> alreadyKnownTypes = null)
         {
-            var types = new HashSet<Type>();
-            foreach (var prop in containingType.GetProperties().Where(p => !p.GetCustomAttributes(false).OfType<XmlIgnoreAttribute>().Any())) //Get all properties without XmlIgnore attribute.
+            if (alreadyKnownTypes == null) alreadyKnownTypes = new HashSet<Type>();
+            foreach (var implementingType in GetImplementingTypes(baseType))
             {
-                var type = prop.PropertyType;
-                if (type.IsInterface)
+                alreadyKnownTypes.Add(implementingType);
+            }
+            //types.Add(baseType);
+            foreach (var prop in baseType.GetProperties().Where(p => !p.GetCustomAttributes(false).OfType<XmlIgnoreAttribute>().Any()))
+            {
+                foreach (var type in GetKnownTypes(prop.PropertyType, alreadyKnownTypes))
                 {
-                    foreach (var implementingType in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a =>
-                    {
-                        try
-                        {
-                            return a.GetExportedTypes();
-                        }
-                        catch //(Exception ex)
-                        {
-                            return Enumerable.Empty<Type>();
-                        }
-                    }).Where(t => type.IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface))
-                    {
-                        types.Add(implementingType);
-                    }
-                }
-                else
-                {
-                    types.Add(type);
+                    alreadyKnownTypes.Add(type);
+                    if(type.IsArray)
                 }
             }
-            return types;
+            return alreadyKnownTypes;
+        }
+        private static IEnumerable<Type> GetImplementingTypes(Type baseType)
+        {
+            if (baseType.IsInterface || baseType.IsAbstract)
+            {
+                return AppDomain.CurrentDomain.GetAssemblies().SelectMany(a =>
+                {
+                    try
+                    {
+                        return a.GetExportedTypes();
+                    }
+                    catch //(Exception ex)
+                    {
+                        return Enumerable.Empty<Type>();
+                    }
+                }).Where(t => baseType.IsAssignableFrom(t));
+            }
+            else
+            {
+                return Enumerable.Repeat(baseType, 1);
+            }
         }
 
         #region Serialization helper
