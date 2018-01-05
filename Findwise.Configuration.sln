@@ -3,7 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Findwise.ConfigEditor", "Findwise.ConfigEditor\Findwise.ConfigEditor.csproj", "{03D5D245-01FD-4676-9A57-8BD3B9894CFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Findwise.Configuration", "Findwise.Configuration\Findwise.Configuration.csproj", "{576E8A05-E531-43C8-858F-5B58D7B9902C}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{03D5D245-01FD-4676-9A57-8BD3B9894CFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03D5D245-01FD-4676-9A57-8BD3B9894CFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03D5D245-01FD-4676-9A57-8BD3B9894CFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03D5D245-01FD-4676-9A57-8BD3B9894CFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{576E8A05-E531-43C8-858F-5B58D7B9902C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{576E8A05-E531-43C8-858F-5B58D7B9902C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{576E8A05-E531-43C8-858F-5B58D7B9902C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{576E8A05-E531-43C8-858F-5B58D7B9902C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
