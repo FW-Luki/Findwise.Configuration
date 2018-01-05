@@ -134,21 +134,12 @@ namespace Findwise.Configuration
         }
         private static IEnumerable<Type> GetKnownTypes(Type baseType, HashSet<Type> alreadyKnownTypes = null)
         {
-            if (alreadyKnownTypes == null) alreadyKnownTypes = new HashSet<Type>();
-            foreach (var implementingType in GetImplementingTypes(baseType))
+            var types = new HashSet<Type>();
+            foreach (var type in GetImplementingTypes(baseType))
             {
-                alreadyKnownTypes.Add(implementingType);
+                types.Add(type);
             }
-            //types.Add(baseType);
-            foreach (var prop in baseType.GetProperties().Where(p => !p.GetCustomAttributes(false).OfType<XmlIgnoreAttribute>().Any()))
-            {
-                foreach (var type in GetKnownTypes(prop.PropertyType, alreadyKnownTypes))
-                {
-                    alreadyKnownTypes.Add(type);
-                    if(type.IsArray)
-                }
-            }
-            return alreadyKnownTypes;
+            return types;
         }
         private static IEnumerable<Type> GetImplementingTypes(Type baseType)
         {
