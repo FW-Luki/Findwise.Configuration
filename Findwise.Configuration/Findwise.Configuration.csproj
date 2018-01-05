@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationBase.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="NullValueSubstituteAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeConverters\SemicolonDelimitedEnumArrayConverter.cs" />
