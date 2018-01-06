@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Findwise.ConfigEditor", "Fi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Findwise.Configuration", "Findwise.Configuration\Findwise.Configuration.csproj", "{576E8A05-E531-43C8-858F-5B58D7B9902C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{00EA3091-F0DE-4B83-B9B3-8F537439FF49}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{576E8A05-E531-43C8-858F-5B58D7B9902C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{576E8A05-E531-43C8-858F-5B58D7B9902C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{576E8A05-E531-43C8-858F-5B58D7B9902C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00EA3091-F0DE-4B83-B9B3-8F537439FF49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00EA3091-F0DE-4B83-B9B3-8F537439FF49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00EA3091-F0DE-4B83-B9B3-8F537439FF49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00EA3091-F0DE-4B83-B9B3-8F537439FF49}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

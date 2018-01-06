@@ -132,14 +132,31 @@ namespace Findwise.Configuration
         {
             return GetKnownTypes(typeof(T));
         }
-        private static IEnumerable<Type> GetKnownTypes(Type baseType, HashSet<Type> alreadyKnownTypes = null)
+        public static IEnumerable<Type> GetKnownTypes(Type baseType, HashSet<Type> alreadyKnownTypes = null)
         {
-            var types = new HashSet<Type>();
-            foreach (var type in GetImplementingTypes(baseType))
+            //if (alreadyKnownTypes?.Contains(baseType) ?? false) return Enumerable.Empty<Type>();
+            if (alreadyKnownTypes == null) alreadyKnownTypes = new HashSet<Type>();
+            alreadyKnownTypes.Add(baseType);
+
+            var types = new HashSet<Type>
             {
-                types.Add(type);
+                baseType
+            };
+            AddRangeToSet(types, GetImplementingTypes(baseType));
+            AddRangeToSet(types, GetContainedTypes(baseType));
+            foreach (var type in types.ToArray())
+            {
+                if (!alreadyKnownTypes.Contains(type))
+                    AddRangeToSet(types, GetKnownTypes(type, alreadyKnownTypes));
             }
             return types;
+        }
+        private static void AddRangeToSet<T>(HashSet<T> set, IEnumerable<T> range)
+        {
+            foreach (var item in range)
+            {
+                set.Add(item);
+            }
         }
         private static IEnumerable<Type> GetImplementingTypes(Type baseType)
         {
@@ -155,12 +172,31 @@ namespace Findwise.Configuration
                     {
                         return Enumerable.Empty<Type>();
                     }
-                }).Where(t => baseType.IsAssignableFrom(t));
+                }).Where(t => baseType.IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface);
             }
             else
             {
                 return Enumerable.Repeat(baseType, 1);
             }
+        }
+        private static IEnumerable<Type> GetContainedTypes(Type baseType)
+        {
+            return baseType.GetProperties().Where(p => !p.GetCustomAttributes(false).OfType<XmlIgnoreAttribute>().Any()
+                                                    && p.GetMethod != null && p.SetMethod != null).SelectMany(p =>
+            {
+                var type = p.PropertyType;
+                var types = Enumerable.Repeat(type, 1);
+
+                if (typeof(System.Collections.IEnumerable).IsAssignableFrom(type))
+                {
+                    if (type.IsArray)
+                        types = types.Concat(new[] { type.GetElementType() });
+                    else
+                        types = types.Concat(new[] { type.GetGenericArguments().FirstOrDefault() });
+                }
+
+                return types.Where(t => t != null);
+            });
         }
 
         #region Serialization helper
