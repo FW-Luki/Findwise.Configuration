@@ -16,8 +16,15 @@ namespace Findwise.Configuration.TypeEditors
     {
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            var type = (Type)base.EditValue(context, provider, value);
-            return type != null ? Activator.CreateInstance(type) : null;
+            var editedValue = base.EditValue(context, provider, value);
+            if (editedValue is Type type)
+            {
+                return type != null ? Activator.CreateInstance(type) : null;
+            }
+            else
+            {
+                return editedValue;
+            }
         }
     }
 
@@ -29,8 +36,15 @@ namespace Findwise.Configuration.TypeEditors
     {
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            var type = (Type)base.EditValue(context, provider, value);
-            return type != null ? Activator.CreateInstance(type) : null;
+            var editedValue = base.EditValue(context, provider, value);
+            if (editedValue is Type type)
+            {
+                return type != null ? Activator.CreateInstance(type) : null;
+            }
+            else
+            {
+                return editedValue;
+            }
         }
     }
 }

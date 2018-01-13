@@ -51,11 +51,14 @@ namespace Findwise.Configuration.TypeEditors
     /// </summary>
     public class DerivedTypeEditor : DerivedTypeEditor<object>
     {
+        protected Type BaseType;
+
         protected override object[] GetItems(ITypeDescriptorContext context)
         {
             var options = context.PropertyDescriptor.Attributes.OfType<DerivedTypeEditor.OptionsAttribute>().First();
-            var dataSource = options.BaseType.GetDerivedTypes();
-            if (!(options?.IncludeBaseType ?? false)) dataSource = dataSource.Except(new[] { options.BaseType });
+            BaseType = options.BaseType;
+            var dataSource = BaseType.GetDerivedTypes();
+            if (!(options?.IncludeBaseType ?? false)) dataSource = dataSource.Except(new[] { BaseType });
             if (options?.AlphabeticOrder ?? false) dataSource = dataSource.OrderBy(t => t.Name);
             return dataSource.ToArray();
         }
