@@ -10,43 +10,62 @@ using System.Windows.Forms.Design;
 namespace Findwise.Configuration.TypeEditors
 {
     /// <summary>
-    /// UI type editor that provides abilty to choose one of the types derived from specified base type, excluding the base type.
+    /// <para>UI type editor that provides abilty to choose one of the types derived from specified base type, excluding the base type.</para>
+    /// <para>In order to include the base type or sort types alphabetically add <see cref="DerivedTypeEditor.OptionsAttribute"/>.</para>
     /// </summary>
     /// <typeparam name="T">Base class or implemented interface</typeparam>
-    public class DerivedTypeEditor<T> : UITypeEditor
+    public class DerivedTypeEditor<T> : ListBoxEditor
     {
-        private IWindowsFormsEditorService _editorService = null;
-
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        protected override object[] GetItems(ITypeDescriptorContext context)
         {
-            return UITypeEditorEditStyle.DropDown;
+            var dataSource = typeof(T).GetDerivedTypes();
+            var options = context.PropertyDescriptor.Attributes.OfType<DerivedTypeEditor.OptionsAttribute>().FirstOrDefault();
+            if (!(options?.IncludeBaseType ?? false)) dataSource = dataSource.Except(new[] { typeof(T) });
+            if (options?.AlphabeticOrder ?? false) dataSource = dataSource.OrderBy(t => t.Name);
+            return dataSource.ToArray();
         }
 
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        protected override object GetPreviousItem(object value)
         {
-            _editorService = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-
-            using (var listBox = new ListBox())
-            {
-                listBox.SelectionMode = SelectionMode.One;
-                listBox.Click += ListBox_SelectedValueChanged;
-
-                var dataSource = typeof(T).GetDerivedTypes().Except(new[] { typeof(T) }).ToList();
-                listBox.Items.Clear(); listBox.Items.AddRange(dataSource.ToArray()); //listBox.DataSource = dataSource;
-                listBox.DisplayMember = nameof(Type.Name);
-                listBox.ValueMember = nameof(Type.FullName);
-                listBox.SelectedItem = value as Type;
-
-                _editorService.DropDownControl(listBox);
-                if (listBox.SelectedItem == null) return value;
-                return ((Type)listBox.SelectedItem);
-            }
+            return value as Type;
         }
 
-        private void ListBox_SelectedValueChanged(object sender, EventArgs e)
+        protected override object GetCurrentItem(object value)
         {
-            _editorService?.CloseDropDown();
-            _editorService = null;
+            return (Type)value;
+        }
+
+        protected override string GetDisplayMember()
+        {
+            return nameof(Type.Name);
+        }
+        protected override string GetValueMember()
+        {
+            return nameof(Type.FullName);
+        }
+    }
+
+    /// <summary>
+    /// <para>UI type editor that provides abilty to choose one of the types derived from specified base type, excluding the base type.</para>
+    /// <para>This version is more flexible than its generic equivalent due to its lack of type parameter but it must go with <see cref="DerivedTypeEditor.OptionsAttribute.BaseType"/> specified.</para>
+    /// </summary>
+    public class DerivedTypeEditor : DerivedTypeEditor<object>
+    {
+        protected override object[] GetItems(ITypeDescriptorContext context)
+        {
+            var options = context.PropertyDescriptor.Attributes.OfType<DerivedTypeEditor.OptionsAttribute>().First();
+            var dataSource = options.BaseType.GetDerivedTypes();
+            if (!(options?.IncludeBaseType ?? false)) dataSource = dataSource.Except(new[] { options.BaseType });
+            if (options?.AlphabeticOrder ?? false) dataSource = dataSource.OrderBy(t => t.Name);
+            return dataSource.ToArray();
+        }
+
+
+        public class OptionsAttribute : Attribute
+        {
+            public bool IncludeBaseType { get; set; }
+            public bool AlphabeticOrder { get; set; }
+            public Type BaseType { get; set; }
         }
     }
 }

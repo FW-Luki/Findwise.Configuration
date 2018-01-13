@@ -1,0 +1,36 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Findwise.Configuration.TypeEditors
+{
+    /// <summary>
+    /// <para>UI type editor that provides abilty to create an instance of one of the types derived from specified base type, excluding the base type.</para>
+    /// <para>In order to include the base type or sort types alphabetically add <see cref="DerivedTypeEditor.OptionsAttribute"/>.</para>
+    /// </summary>
+    /// <typeparam name="T">Base class or implemented interface</typeparam>
+    public class DerivedClassEditor<T> : DerivedTypeEditor<T>
+    {
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            var type = (Type)base.EditValue(context, provider, value);
+            return type != null ? Activator.CreateInstance(type) : null;
+        }
+    }
+
+    /// <summary>
+    /// <para>UI type editor that provides abilty to create an instance of one of the types derived from specified base type, excluding the base type.</para>
+    /// <para>This version is more flexible than its generic equivalent due to its lack of type parameter but it must go with <see cref="DerivedTypeEditor.OptionsAttribute.BaseType"/> specified.</para>
+    /// </summary>
+    public class DerivedClassEditor : DerivedTypeEditor
+    {
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            var type = (Type)base.EditValue(context, provider, value);
+            return type != null ? Activator.CreateInstance(type) : null;
+        }
+    }
+}
