@@ -56,6 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeConverters\SemicolonDelimitedEnumArrayConverter.cs" />
     <Compile Include="TypeConverters\SemicolonDelimitedStringArrayConverter.cs" />
+    <Compile Include="TypeEditors\ApplicationHelpCommandEditor.cs" />
     <Compile Include="TypeEditors\DerivedClassEditor.cs" />
     <Compile Include="TypeEditors\EnumExEditor.cs" />
     <Compile Include="TypeEditors\FlagsEnumEditor.cs" />
