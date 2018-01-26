@@ -39,6 +39,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
@@ -58,6 +59,7 @@
     <Compile Include="TypeConverters\SemicolonDelimitedEnumArrayConverter.cs" />
     <Compile Include="TypeConverters\SemicolonDelimitedStringArrayConverter.cs" />
     <Compile Include="TypeEditors\ApplicationHelpCommandEditor.cs" />
+    <Compile Include="TypeEditors\CsvLoaderEditor.cs" />
     <Compile Include="TypeEditors\RepeatClassEditor.cs" />
     <Compile Include="TypeEditors\RepeatTypeEditor.cs" />
     <Compile Include="TypeEditors\TypeScheduleClassEditor.cs" />
