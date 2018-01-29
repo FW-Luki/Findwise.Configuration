@@ -60,13 +60,7 @@
     <Compile Include="TypeConverters\SemicolonDelimitedStringArrayConverter.cs" />
     <Compile Include="TypeEditors\ApplicationHelpCommandEditor.cs" />
     <Compile Include="TypeEditors\CsvLoaderEditor.cs" />
-    <Compile Include="TypeEditors\RepeatClassEditor.cs" />
-    <Compile Include="TypeEditors\RepeatTypeEditor.cs" />
-    <Compile Include="TypeEditors\TypeScheduleClassEditor.cs" />
-    <Compile Include="TypeEditors\TypeScheduleTypeEditor.cs" />
     <Compile Include="TypeEditors\CreateInstanceEditor.cs" />
-    <Compile Include="TypeEditors\ContentSourceTypeEditor.cs" />
-    <Compile Include="TypeEditors\ContentSourceClassEditor.cs" />
     <Compile Include="TypeEditors\DerivedClassEditor.cs" />
     <Compile Include="TypeEditors\EnumExEditor.cs" />
     <Compile Include="TypeEditors\FlagsEnumEditor.cs" />
