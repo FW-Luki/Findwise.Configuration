@@ -100,7 +100,7 @@ namespace Findwise.Configuration
             using (var output = new StringWriter())
             using (var writer = new XmlTextWriter(output) { Formatting = Formatting.Indented })
             {
-                var serializer = new NetDataContractSerializer();
+                var serializer = GetFormatter(GetType());
                 serializer.WriteObject(writer, this);
                 return output.GetStringBuilder().ToString();
             }
@@ -120,10 +120,24 @@ namespace Findwise.Configuration
             using (var input = new StringReader(data))
             using (var reader = new XmlTextReader(input))
             {
-                var deserializer = new NetDataContractSerializer();
+                var deserializer = GetFormatter(typeof(T));
                 if (binder != null) deserializer.Binder = binder;
                 return (T)deserializer.ReadObject(reader);
             }
+        }
+
+        private static NetDataContractSerializer GetFormatter(Type type)
+        {
+            var formatter = new NetDataContractSerializer();
+            var serializationSurrogate = type.GetCustomAttributes(false).OfType<SerializationSurrogateAttribute>().FirstOrDefault()?.SerializationSurrogateType is Type sst ?
+                Activator.CreateInstance(sst) as ISerializationSurrogate : null;
+            if (serializationSurrogate != null)
+            {
+                var surrogateSelector = new SurrogateSelector();
+                surrogateSelector.AddSurrogate(type, new StreamingContext(StreamingContextStates.All), serializationSurrogate);
+                formatter.SurrogateSelector = surrogateSelector;
+            }
+            return formatter;
         }
 
         #region Serialization helper

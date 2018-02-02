@@ -53,11 +53,14 @@
   <ItemGroup>
     <Compile Include="ConfigurationBase.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="HelpLinkAttribute.cs" />
     <Compile Include="NullValueSubstituteAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializationSurrogateAttribute.cs" />
     <Compile Include="TypeConverters\DisplayNameExpandableObjectConverter.cs" />
     <Compile Include="TypeConverters\SemicolonDelimitedEnumArrayConverter.cs" />
     <Compile Include="TypeConverters\SemicolonDelimitedStringArrayConverter.cs" />
+    <Compile Include="TypeConverters\TypeNameConverter.cs" />
     <Compile Include="TypeEditors\ApplicationHelpCommandEditor.cs" />
     <Compile Include="TypeEditors\CsvLoaderEditor.cs" />
     <Compile Include="TypeEditors\CreateInstanceEditor.cs" />
