@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Findwise.Configuration.TypeConverters;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -12,6 +13,7 @@ using System.Windows.Forms;
 
 namespace Findwise.Configuration.TypeEditors
 {
+    [TypeConverter(typeof(StringArrayConverter))]
     public class CsvLoaderEditor : ArrayEditor
     {
         public CsvLoaderEditor(Type type) : base(type)
@@ -38,7 +40,13 @@ namespace Findwise.Configuration.TypeEditors
                         var csvLines = File.ReadAllLines(dialog.FileName);
                         dataTable.Columns.AddRange(csvLines.First().Split(FieldSeparator.ToCharArray()).Select(x => new DataColumn(x)).ToArray());
 
-                        return GetObjectInstances(csvLines, dataTable, type).ToArray();
+                        var objectInstances = GetObjectInstances(csvLines, dataTable, type).ToArray();
+                        var array = Array.CreateInstance(type, objectInstances.Count());
+                        for (int i = 0; i < objectInstances.Count(); i++)
+                        {
+                            array.SetValue(objectInstances[i], i);
+                        }
+                        return array;
                     }
                 }
             }
@@ -72,12 +80,20 @@ namespace Findwise.Configuration.TypeEditors
                     {
                         try
                         {
+                            StringArrayConverter stringArrayConverter = new StringArrayConverter();
                             Type t = Nullable.GetUnderlyingType(p.PropertyType) ?? p.PropertyType;
-                            object safeValue = (item == null) ? null : Convert.ChangeType(item, t);
+                            object safeValue = null;
+                            if (stringArrayConverter.CanConvertTo(t))
+                            {
+                                safeValue = (item == null) ? null : stringArrayConverter.ConvertTo(item, t);
+                            }
+                            else
+                                safeValue = (item == null) ? null : Convert.ChangeType(item, t);
                             p.SetValue(obj, safeValue, null);
                         }
                         catch (Exception ex)
                         {
+                            throw;
                         }
                     }
                 }
