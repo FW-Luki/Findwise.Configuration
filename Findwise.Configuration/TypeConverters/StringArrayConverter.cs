@@ -19,7 +19,6 @@ namespace Findwise.Configuration.TypeConverters
         }
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            //string[] -> "aaa,bbb,ccc"
             if (value is string[] stringArray)
             {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -40,7 +39,6 @@ namespace Findwise.Configuration.TypeConverters
         }
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            //"aaa,bbb,ccc" -> string[]
             if(destinationType == typeof(string[]) && value is string str)
             {
                 return str.Split(Delimiter);
