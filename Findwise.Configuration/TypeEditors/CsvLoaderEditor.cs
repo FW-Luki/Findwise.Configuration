@@ -81,11 +81,16 @@ namespace Findwise.Configuration.TypeEditors
                         try
                         {
                             StringArrayConverter stringArrayConverter = new StringArrayConverter();
+                            ManagedDataTypeEnumConverter managedDataTypeEnumConverter = new ManagedDataTypeEnumConverter();
                             Type t = Nullable.GetUnderlyingType(p.PropertyType) ?? p.PropertyType;
                             object safeValue = null;
                             if (stringArrayConverter.CanConvertTo(t))
                             {
                                 safeValue = (item == null) ? null : stringArrayConverter.ConvertTo(item, t);
+                            }
+                            else if(managedDataTypeEnumConverter.CanConvertTo(t))
+                            {
+                                safeValue = (item == null) ? null : managedDataTypeEnumConverter.ConvertTo(item, t);
                             }
                             else
                                 safeValue = (item == null) ? null : Convert.ChangeType(item, t);
