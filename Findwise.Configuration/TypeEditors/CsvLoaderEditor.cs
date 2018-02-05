@@ -81,7 +81,7 @@ namespace Findwise.Configuration.TypeEditors
                         try
                         {
                             StringArrayConverter stringArrayConverter = new StringArrayConverter();
-                            ManagedDataTypeEnumConverter managedDataTypeEnumConverter = new ManagedDataTypeEnumConverter();
+                            TypeConverters.EnumConverter managedDataTypeEnumConverter = new TypeConverters.EnumConverter();
                             Type t = Nullable.GetUnderlyingType(p.PropertyType) ?? p.PropertyType;
                             object safeValue = null;
                             if (stringArrayConverter.CanConvertTo(t))
