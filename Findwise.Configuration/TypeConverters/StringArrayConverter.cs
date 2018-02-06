@@ -8,40 +8,34 @@ using System.Threading.Tasks;
 
 namespace Findwise.Configuration.TypeConverters
 {
-    public class StringArrayConverter : TypeConverter
+    public class StringArrayConverter : TypeConverter //ToDo: Rename it to ArrayDelimitedValuesConverter and make it generic?
     {
-        private char _delimiter = ',';
-        public virtual char Delimiter { get { return _delimiter; } set { _delimiter = value; } }
+        public string Delimiter { get; set; } = ","; //ToDo: Or separator?
+
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
-            if (sourceType == typeof(string[])) return true;
+            if (sourceType == typeof(string)) return true;
             return base.CanConvertFrom(context, sourceType);
         }
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            if (value is string[] stringArray)
+            if (value is string str)
             {
-                StringBuilder stringBuilder = new StringBuilder();
-                for (int i = 0; i < stringArray.Count(); i++)
-                {
-                    stringBuilder.Append(i);
-                    if (i < stringArray.Count() - 1)
-                        stringBuilder.Append(Delimiter);
-                }
-                return stringBuilder.ToString();
+                return str.Split(Delimiter.ToCharArray());
             }
             return base.ConvertFrom(context, culture, value);
         }
+
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
-            if (destinationType == typeof(string[])) return true;
+            if (destinationType == typeof(string)) return true;
             return base.CanConvertTo(context, destinationType);
         }
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if(destinationType == typeof(string[]) && value is string str)
+            if(destinationType == typeof(string) && value is string[] stringArray)
             {
-                return str.Split(Delimiter);
+                return string.Join(Delimiter, stringArray);
             }
             return base.ConvertTo(context, culture, value, destinationType);
         }
