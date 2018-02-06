@@ -15,6 +15,9 @@ using System.Reflection;
 
 namespace Findwise.Configuration.TypeEditors
 {
+    /// <summary>
+    /// Provides a user interface for editing arrays with ability to load the contents from CSV file.
+    /// </summary>
     public class CsvLoaderEditor : ArrayEditor
     {
         public CsvLoaderEditor(Type type) : base(type)
@@ -56,10 +59,8 @@ namespace Findwise.Configuration.TypeEditors
         {
             public object CreateInstance(Type propertyType)
             {
-                //if (propertyType.IsArray)
-                //{
-                var type = propertyType; //.GetElementType();
-                using (var dialog = new OpenFileDialog() { Filter = "Csv Files|*.csv|All Files|*.*" })
+                var type = propertyType;
+                using (var dialog = new OpenFileDialog() { Filter = "CSV files|*.csv|All files|*.*" })
                 {
                     if (dialog.ShowDialog() == DialogResult.OK)
                     {
@@ -75,14 +76,13 @@ namespace Findwise.Configuration.TypeEditors
                         }
                         return array;
                     }
-                    //}
                 }
                 return null;
             }
 
             public override string ToString()
             {
-                return "Create from CSV file...";
+                return "Create from CSV file..."; //ToDo: Add some magic (possibly by Reflection) to actually display this text in the appropriate menu item.
             }
 
             private IEnumerable<object> GetObjectInstances(string[] csvLines, DataTable dataTable, Type type)
@@ -116,7 +116,7 @@ namespace Findwise.Configuration.TypeEditors
                                 var safeValue = ConvertValue(p, item);
                                 p.SetValue(obj, safeValue, null);
                             }
-                            catch { }
+                            catch { } //Convert or set value failed. Well, the world doesn't end here, let the property have its default value.
                         }
                     }
                 }
@@ -132,7 +132,6 @@ namespace Findwise.Configuration.TypeEditors
                 var type = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
                 return (value == null) ? null : Convert.ChangeType(value, type);
             }
-
             private static IEnumerable<TypeConverter> GetTypeConverters(PropertyInfo propertyInfo)
             {
                 foreach (TypeConverterAttribute a in propertyInfo.GetCustomAttributes(typeof(TypeConverterAttribute), true))
