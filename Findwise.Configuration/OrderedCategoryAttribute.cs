@@ -28,7 +28,7 @@ namespace Findwise.Configuration
         }
 
         /// <summary>
-        /// Creates new instance of <see cref="OrderedCategoryAttribute"/> using specified name with no order.
+        /// Creates new instance of <see cref="OrderedCategoryAttribute"/> using specified name with the order specified.
         /// The order number also indicates how many tabs are inserted at the left side of category name string.
         /// </summary>
         /// <param name="category">The name of the category.</param>
@@ -39,7 +39,7 @@ namespace Findwise.Configuration
         }
 
         /// <summary>
-        /// Creates new instance of <see cref="OrderedCategoryAttribute"/> using specified name with no order.
+        /// Creates new instance of <see cref="OrderedCategoryAttribute"/> using specified name with the order specified.
         /// The order number also indicates how many tabs are inserted at the left side of category name string.
         /// It uses <see cref="KeyValuePair&lt;string, int&gt;"/> to increase category order consistency.
         /// </summary>
